@@ -1,0 +1,11 @@
+<!-- Placeholder SVG per Gallery 2 - Atleta con Maglietta -->
+<svg width="800" height="600" viewBox="0 0 800 600" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="800" height="600" fill="#2d2d2d"/>
+  <ellipse cx="400" cy="150" rx="80" ry="100" fill="#1a1a1a"/>
+  <circle cx="400" cy="120" r="40" fill="#666666"/>
+  <rect x="320" y="200" width="160" height="200" fill="#1a1a1a" rx="10"/>
+  <text x="400" y="260" fill="#00ff00" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" font-weight="bold">ALL IN</text>
+  <text x="400" y="280" fill="#00ff00" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" font-weight="bold">KICKBOXING</text>
+  <rect x="300" y="420" width="200" height="100" fill="#666666" opacity="0.3" rx="5"/>
+  <text x="400" y="550" fill="#666666" text-anchor="middle" font-family="Arial, sans-serif" font-size="12">Sostituisci con gallery-2.jpg</text>
+</svg>
