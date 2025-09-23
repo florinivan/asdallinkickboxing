@@ -441,8 +441,11 @@ class PDFService {
     
     // Validazione per minorenni
     if (this.isMinor(formData.data_nascita)) {
-      if (!formData.genitore_nome || formData.genitore_nome.trim() === '') {
+      if (!formData.genitore1_nome || formData.genitore1_nome.trim() === '') {
         errors.push('Nome del genitore/tutore è obbligatorio per i minorenni');
+      }
+      if (!formData.genitore1_cognome || formData.genitore1_cognome.trim() === '') {
+        errors.push('Cognome del genitore/tutore è obbligatorio per i minorenni');
       }
     }
     
@@ -718,8 +721,8 @@ class PDFService {
     // Aggiustate per posizionare i testi SULLE linee invece che sotto
     const fields = {
       // "Io sottoscritto (Cognome, Nome) ______________________________________________________"
-      cognome: { x: 190, y: height - 200 },   // Spostato verso l'alto
-      nome: { x: 350, y: height - 200 },   // Spostato verso l'alto
+      cognome: { x: 190, y: height - 205 },   // Spostato verso l'alto
+      nome: { x: 350, y: height - 205 },   // Spostato verso l'alto
       
       // "nato a___________________________ il__________________, residente in ___________________,"
       luogo_nascita: { x: 100, y: height - 230 },  // Spostato verso l'alto  
