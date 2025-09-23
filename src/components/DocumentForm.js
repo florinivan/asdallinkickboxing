@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useApp } from '../context/AppContext';
 import { validateCodiceFiscale, validateEmail, formatTelefono } from '../services/validation';
-import { generateDocument } from '../services/api';
+import { generateDocument, downloadDocument } from '../services/api';
 import './DocumentForm.css';
 
 function DocumentForm() {
@@ -94,18 +94,23 @@ function DocumentForm() {
     actions.clearErrors();
 
     try {
+      // Genera il PDF lato client
       const response = await generateDocument(state.formData);
       
-      // Apri il documento generato in una nuova finestra
-      window.open(response.data.fileUrl, '_blank');
-      
-      // Pulisci il form
-      actions.resetForm();
-      actions.setMessage('Documento generato con successo!', 'success');
+      if (response.success) {
+        // Avvia automaticamente il download
+        downloadDocument(response.data.pdfBytes, response.data.filename);
+        
+        // Pulisci il form e mostra messaggio di successo
+        actions.resetForm();
+        actions.setMessage(response.data.message, 'success');
+      } else {
+        throw new Error('Errore nella generazione del documento');
+      }
       
     } catch (error) {
       console.error('Errore generazione documento:', error);
-      actions.setMessage('Errore durante la generazione del documento', 'error');
+      actions.setMessage(error.message || 'Errore durante la generazione del documento', 'error');
     } finally {
       actions.setLoading(false);
     }

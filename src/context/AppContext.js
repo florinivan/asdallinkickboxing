@@ -4,7 +4,7 @@ import React, { createContext, useContext, useReducer, useEffect } from 'react';
 const initialState = {
   // PDF configuration
   pdfFile: 'FKvedasipolicyprivacyperidettagli_compressed_organized.pdf',
-  pdfUrl: '/uploads/FKvedasipolicyprivacyperidettagli_compressed_organized.pdf',
+  pdfUrl: '/FKvedasipolicyprivacyperidettagli_compressed_organized.pdf',
   currentPage: 1,
   totalPages: 0,
   scale: 1.2,

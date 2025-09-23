@@ -1,75 +1,84 @@
-import axios from 'axios';
+import pdfService from './pdfService';
 
-// Configurazione axios
-const api = axios.create({
-  baseURL: process.env.NODE_ENV === 'production' ? '/api' : 'http://localhost:8000/api',
-  timeout: 30000,
-  headers: {
-    'Content-Type': 'application/json',
-  }
-});
+/**
+ * Servizio API completamente lato client
+ * Non utilizza più backend PHP, tutto è gestito nel browser
+ */
 
-// Interceptor per gestire errori globali
-api.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    console.error('API Error:', error);
-    
-    if (error.response?.status === 500) {
-      throw new Error('Errore del server. Riprova più tardi.');
-    } else if (error.response?.status === 400) {
-      throw new Error(error.response.data?.message || 'Dati non validi.');
-    } else if (!error.response) {
-      throw new Error('Errore di connessione. Controlla la tua connessione internet.');
-    }
-    
-    throw error;
-  }
-);
+// Simula un delay di rete per esperienza realistica
+const simulateNetworkDelay = (ms = 1000) => 
+  new Promise(resolve => setTimeout(resolve, ms));
 
-// Genera documento compilato
+// Genera documento compilato usando pdf-lib
 export async function generateDocument(formData) {
   try {
-    const response = await api.post('/generate_pdf.php', formData);
+    // Simula loading per esperienza utente
+    await simulateNetworkDelay(800);
     
-    if (response.data.success) {
-      return {
-        success: true,
-        data: {
-          fileUrl: response.data.download_url,
-          filename: response.data.filename,
-          message: response.data.message
-        }
-      };
-    } else {
-      throw new Error(response.data.error || 'Errore nella generazione del documento');
+    // Valida i dati del form
+    const validationErrors = pdfService.validateFormData(formData);
+    if (validationErrors.length > 0) {
+      throw new Error(validationErrors.join(', '));
     }
+    
+    // Genera il PDF
+    const pdfBytes = await pdfService.fillPDF(formData);
+    
+    // Crea filename personalizzato
+    const timestamp = new Date().toISOString().slice(0, 10);
+    const filename = `documento_${formData.nome?.replace(/\s+/g, '_') || 'compilato'}_${timestamp}.pdf`;
+    
+    return {
+      success: true,
+      data: {
+        pdfBytes,
+        filename,
+        message: 'Documento generato con successo!'
+      }
+    };
+    
   } catch (error) {
-    if (error.response?.data?.error) {
-      throw new Error(error.response.data.error);
-    }
-    throw new Error('Errore durante la generazione del documento: ' + error.message);
+    console.error('Errore nella generazione del documento:', error);
+    throw new Error(error.message || 'Errore nella generazione del documento');
   }
 }
 
-// Verifica esistenza PDF
-export async function checkPDFExists() {
+// Scarica il documento generato
+export async function downloadDocument(pdfBytes, filename) {
   try {
-    const response = await api.get('/check-pdf');
-    return response.data;
+    pdfService.downloadPDF(pdfBytes, filename);
+    return {
+      success: true,
+      message: 'Download avviato con successo!'
+    };
   } catch (error) {
-    throw new Error('Errore durante la verifica del PDF: ' + error.message);
+    console.error('Errore nel download:', error);
+    throw new Error('Errore durante il download del documento');
   }
 }
 
-// Health check API
-export async function healthCheck() {
+// Controlla se il PDF è disponibile
+export async function checkPDFAvailability() {
   try {
-    const response = await api.get('/health');
-    return response.data;
+    // Tenta di caricare il PDF per verificare che sia disponibile
+    const response = await fetch('/FKvedasipolicyprivacyperidettagli_compressed_organized.pdf', {
+      method: 'HEAD'
+    });
+    
+    return {
+      success: response.ok,
+      data: {
+        available: response.ok,
+        size: response.headers.get('content-length'),
+        lastModified: response.headers.get('last-modified')
+      }
+    };
   } catch (error) {
-    throw new Error('Servizio non disponibile');
+    console.error('Errore nel controllo PDF:', error);
+    return {
+      success: false,
+      data: { available: false },
+      error: 'PDF non disponibile'
+    };
   }
 }
-
-export default api;
