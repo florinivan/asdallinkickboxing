@@ -1,0 +1,15 @@
+<!-- Placeholder SVG per Gallery 3 - Medaglie -->
+<svg width="800" height="600" viewBox="0 0 800 600" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="800" height="600" fill="#1a1a1a"/>
+  <circle cx="250" cy="200" r="50" fill="#FFD700" stroke="#FFA500" stroke-width="3"/>
+  <circle cx="400" cy="180" r="55" fill="#FFD700" stroke="#FFA500" stroke-width="3"/>
+  <circle cx="550" cy="200" r="50" fill="#C0C0C0" stroke="#A0A0A0" stroke-width="3"/>
+  <text x="250" y="210" fill="#1a1a1a" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="bold">3°</text>
+  <text x="400" y="190" fill="#1a1a1a" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" font-weight="bold">1°</text>
+  <text x="550" y="210" fill="#1a1a1a" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="bold">2°</text>
+  <rect x="200" y="280" width="400" height="150" fill="#2d2d2d" rx="10"/>
+  <text x="400" y="320" fill="#00ff00" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" font-weight="bold">FEDERKOMBAT</text>
+  <text x="400" y="350" fill="#ffffff" text-anchor="middle" font-family="Arial, sans-serif" font-size="14">Medaglie e Riconoscimenti</text>
+  <text x="400" y="380" fill="#cccccc" text-anchor="middle" font-family="Arial, sans-serif" font-size="12">Competizioni Regionali</text>
+  <text x="400" y="550" fill="#666666" text-anchor="middle" font-family="Arial, sans-serif" font-size="12">Sostituisci con gallery-3.jpg</text>
+</svg>
