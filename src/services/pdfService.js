@@ -502,22 +502,22 @@ class PDFService {
       cognome_nome: { x: 250, y: height - 245 },    // Nome completo con virgola, spostato sopra la linea
       
       // Riga 2: "nato a___________________________ il__________________, residente in ___________________,"
-      luogo_nascita: { x: 100, y: height - 275 },   // Spostato sopra la linea
-      data_nascita: { x: 250, y: height - 275 },     // Spostato sopra la linea
-      citta: { x: 420, y: height - 275 },            // Spostato sopra la linea
+      luogo_nascita: { x: 100, y: height - 280 },   // Spostato sopra la linea
+      data_nascita: { x: 250, y: height - 280 },     // Spostato sopra la linea
+      citta: { x: 420, y: height - 280 },            // Spostato sopra la linea
       
       // Riga 3: "via_______________________________________________________________________________"
       indirizzo: { x: 100, y: height - 310 },         // Indirizzo completo
       
       // Checkbox "• ACCONSENTO □ NON ACCONSENTO □"
-      acconsento: { x: 185, y: height - 465 },       // Checkbox ACCONSENTO
-      non_acconsento: { x: 395, y: height - 465 },   // Checkbox NON ACCONSENTO
+      acconsento: { x: 180, y: height - 465 },       // Checkbox ACCONSENTO
+      non_acconsento: { x: 390, y: height - 465 },   // Checkbox NON ACCONSENTO
       
       // Fondo pagina: "Luogo e data ____________"
-      luogo_data: { x: 130, y: height - 550 },
+      luogo_data: { x: 120, y: height - 535 },
       
       // Fondo pagina: "Firma___________________"
-      firma: { x: 110, y: height - 600 }
+      firma: { x: 100, y: height - 555 }
     };
     
     const fontSize = 9;  // Font più piccolo per adattarsi meglio
@@ -607,26 +607,26 @@ class PDFService {
     // Basate sui risultati dei test e dimensioni reali
     const fields = {
       // "Io sottoscritto (Cognome, Nome) ___________________________________"
-      cognome_nome: { x: 250, y: height - 280 },  // Più a destra per centramento
+      cognome_nome: { x: 250, y: height - 330 },  // Più a destra per centramento
       
       // "nato a___________________ il______________, residente in _______________,"
-      luogo_nascita: { x: 100, y: height - 310 },
-      data_nascita: { x: 250, y: height - 310 },   // Più a destra
-      citta: { x: 420, y: height - 310 },          // Più a destra
+      luogo_nascita: { x: 100, y: height - 365 },
+      data_nascita: { x: 250, y: height - 365 },   // Più a destra
+      citta: { x: 420, y: height - 365 },          // Più a destra
 
       // "via_____________________________________________________________________"
-      indirizzo: { x: 100, y: height - 340 },
+      indirizzo: { x: 100, y: height - 400 },
       
       // Checkbox "- ACCONSENTO □ NON ACCONSENTO □"
       // Posizioni ottimizzate per centrare la X nei quadratini
-      acconsento: { x: 185, y: height - 495 },      // Nel quadratino dopo "ACCONSENTO"
-      non_acconsento: { x: 395, y: height - 495 },  // Nel quadratino dopo "NON ACCONSENTO"
+      acconsento: { x: 180, y: height - 490 },      // Nel quadratino dopo "ACCONSENTO"
+      non_acconsento: { x: 390, y: height - 490 },  // Nel quadratino dopo "NON ACCONSENTO"
       
       // "Luogo e data _______________"
-      luogo_data: { x: 130, y: height - 525 },
+      luogo_data: { x: 120, y: height - 535 },
       
       // "Firma___________________"
-      firma: { x: 110, y: height - 575 }
+      firma: { x: 100, y: height - 555 }
     };
     
     const fontSize = 9;
@@ -718,19 +718,20 @@ class PDFService {
     // Aggiustate per posizionare i testi SULLE linee invece che sotto
     const fields = {
       // "Io sottoscritto (Cognome, Nome) ______________________________________________________"
-      cognome_nome: { x: 250, y: height - 200 },   // Spostato verso l'alto
+      cognome: { x: 190, y: height - 200 },   // Spostato verso l'alto
+      nome: { x: 350, y: height - 200 },   // Spostato verso l'alto
       
       // "nato a___________________________ il__________________, residente in ___________________,"
-      luogo_nascita: { x: 100, y: height - 250 },  // Spostato verso l'alto  
-      data_nascita: { x: 160, y: height - 250 },    // Spostato verso l'alto
-      citta: { x: 200, y: height - 250 },           // Spostato verso l'alto
-      telefono: { x: 320, y: height - 250 },        // Spostato verso l'alto
+      luogo_nascita: { x: 100, y: height - 230 },  // Spostato verso l'alto  
+      data_nascita: { x: 160, y: height - 230 },    // Spostato verso l'alto
+      citta: { x: 250, y: height - 230 },           // Spostato verso l'alto
+      telefono: { x: 360, y: height - 230 },        // Spostato verso l'alto
       
       // "Luogo e data _______________"
-      luogo_data: { x: 130, y: height - 500 },
+      luogo_data: { x: 140, y: height - 420 },
       
       // "Firma___________________"
-      firma: { x: 110, y: height - 550 }
+      firma: { x: 110, y: height - 440 }
     };
     
     const fontSize = 9;
@@ -740,11 +741,14 @@ class PDFService {
       
       // Nome completo
       if (formData.cognome && formData.nome) {
-        const nomeCompleto = `${formData.cognome}, ${formData.nome}`.toUpperCase();
-        page.drawText(nomeCompleto, {
-          x: fields.cognome_nome.x, y: fields.cognome_nome.y, size: fontSize, font, color: black
+        page.drawText(formData.cognome, {
+          x: fields.cognome.x, y: fields.cognome.y, size: fontSize, font, color: black
         });
-        console.log(`✓ Nome completo: '${nomeCompleto}' at (${fields.cognome_nome.x}, ${fields.cognome_nome.y})`);
+        console.log(`✓ Nome completo: '${formData.cognome}' at (${fields.cognome.x}, ${fields.cognome.y})`);
+        page.drawText(formData.nome, {
+          x: fields.nome.x, y: fields.nome.y, size: fontSize, font, color: black
+        });
+        console.log(`✓ Nome completo: '${formData.nome}' at (${fields.nome.x}, ${fields.nome.y})`);
       }
       
       // Luogo nascita
