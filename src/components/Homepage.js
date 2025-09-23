@@ -1,57 +1,154 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './Homepage.css';
 
 function Homepage() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [isVideoPlaying, setIsVideoPlaying] = useState(false);
+  const [galleryInterval, setGalleryInterval] = useState(null);
+  const navigate = useNavigate();
 
-  // Immagini della gallery - con placeholder SVG funzionanti
-  const galleryImages = [
+  // Immagini e video della gallery - foto e video reali ASD All IN Kickboxing
+  const galleryImages = useMemo(() => [
     {
-      src: '/images/gallery-1.svg',
-      alt: 'Nuovo Corso All IN Kickboxing',
-      caption: 'Il nostro nuovo corso di kickboxing zero contatto'
+      src: '/images/gallery-1.jpg',
+      type: 'image',
+      alt: 'Corso All IN Kickboxing',
+      caption: 'Il nostro corso di kickboxing zero contatto'
     },
     {
-      src: '/images/gallery-2.svg',
+      src: '/images/gallery-1.mp4',
+      type: 'video',
+      poster: '/images/gallery-1.mp4',
+      alt: 'Video Allenamento Kickboxing',
+      caption: 'Video dimostrativo degli allenamenti'
+    },
+    {
+      src: '/images/gallery-2.jpg',
+      type: 'image',
       alt: 'Team All IN Kickboxing in azione',
-      caption: 'Il nostro team durante gli allenamenti'
-    },
-    {
-      src: '/images/gallery-3.svg',
-      alt: 'Medaglie e successi',
       caption: 'I nostri successi nelle competizioni'
     },
     {
-      src: '/images/gallery-4.svg',
+      src: '/images/gallery-2.mp4',
+      type: 'video',
+      poster: '/images/gallery-2.mp4',
+      alt: 'Video Team in Azione',
+      caption: 'Il nostro team in azione durante gli allenamenti'
+    },
+    {
+      src: '/images/gallery-3.jpg',
+      type: 'image',
+      alt: 'Certificazione FederKombat Allenatori',
+      caption: 'I nostri professionisti certificati FederKombat'
+    },
+    {
+      src: '/images/gallery-4.jpg',
+      type: 'image',
       alt: 'Atleti sul podio',
       caption: 'Atleti vincitori sul podio'
     },
     {
-      src: '/images/gallery-5.svg',
+      src: '/images/gallery-5.jpg',
+      type: 'image',
       alt: 'Competizioni e tornei',
       caption: 'Il nostro team unito nelle competizioni'
     },
     {
-      src: '/images/gallery-6.svg',
+      src: '/images/gallery-6.jpg',
+      type: 'image',
       alt: 'Certificazioni e diplomi',
       caption: 'Certificazioni ufficiali FederKombat'
+    },
+    {
+      src: '/images/gallery-7.jpg',
+      type: 'image',
+      alt: 'Medali e competizioni',
+      caption: 'Le nostre medaglie nelle competizioni'
+    },
+    {
+      src: '/images/gallery-8.jpg',
+      type: 'image',
+      alt: 'Famiglia All IN Kickboxing',
+      caption: 'La nostra famiglia di appassionati'
     }
-  ];
+  ], []);
 
-  // Auto-play per la gallery
+  // Auto-play per la gallery con controllo video
   useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentImageIndex((prevIndex) => 
-        (prevIndex + 1) % galleryImages.length
-      );
-    }, 5000);
+    if (!isVideoPlaying) {
+      const interval = setInterval(() => {
+        setCurrentImageIndex((prevIndex) => 
+          (prevIndex + 1) % galleryImages.length
+        );
+      }, 5000);
+      setGalleryInterval(interval);
+      return () => clearInterval(interval);
+    }
+  }, [galleryImages.length, isVideoPlaying]);
 
-    return () => clearInterval(interval);
-  }, [galleryImages.length]);
+  // Effetto separato per pulire l'intervallo quando il video inizia
+  useEffect(() => {
+    if (isVideoPlaying && galleryInterval) {
+      clearInterval(galleryInterval);
+      setGalleryInterval(null);
+    }
+  }, [isVideoPlaying, galleryInterval]);
+
+  // Effetto per gestire il cambio di elemento nella gallery
+  useEffect(() => {
+    const currentItem = galleryImages[currentImageIndex];
+    if (currentItem.type === 'video') {
+      setIsVideoPlaying(true);
+    } else {
+      setIsVideoPlaying(false);
+    }
+  }, [currentImageIndex, galleryImages]);
 
   const handleImageClick = (index) => {
     setCurrentImageIndex(index);
+    // Se è un video, ferma la gallery
+    if (galleryImages[index].type === 'video') {
+      setIsVideoPlaying(true);
+    } else {
+      setIsVideoPlaying(false);
+    }
+  };
+
+  const handleVideoPlay = () => {
+    setIsVideoPlaying(true);
+  };
+
+  const handleVideoEnd = () => {
+    setIsVideoPlaying(false);
+    // Vai al prossimo elemento dopo che il video finisce
+    setTimeout(() => {
+      setCurrentImageIndex((prevIndex) => 
+        (prevIndex + 1) % galleryImages.length
+      );
+    }, 1000);
+  };
+
+  const handleVideoPause = () => {
+    setIsVideoPlaying(false);
+  };
+
+  // Funzione per navigare ai moduli
+  const handleModuliClick = (e) => {
+    e.preventDefault();
+    navigate('/moduli');
+  };
+
+  // Funzione per scrollare alla sezione About
+  const handleScopriDiPiuClick = (e) => {
+    e.preventDefault();
+    const aboutSection = document.getElementById('about');
+    if (aboutSection) {
+      aboutSection.scrollIntoView({ 
+        behavior: 'smooth',
+        block: 'start'
+      });
+    }
   };
 
   return (
@@ -75,14 +172,14 @@ function Homepage() {
             Trasforma la tua passione in forza. Unisciti alla nostra famiglia di kickboxing e scopri il tuo potenziale.
           </p>
           <div className="hero-buttons">
-            <Link to="/moduli" className="btn btn-primary">
+            <button onClick={handleModuliClick} className="btn btn-primary">
               <i className="fas fa-file-alt"></i>
               Compila Moduli
-            </Link>
-            <a href="#about" className="btn btn-secondary">
+            </button>
+            <button onClick={handleScopriDiPiuClick} className="btn btn-secondary">
               <i className="fas fa-info-circle"></i>
               Scopri di Più
-            </a>
+            </button>
           </div>
         </div>
         <div className="hero-scroll-indicator">
@@ -156,16 +253,44 @@ function Homepage() {
           <div className="gallery-container">
             <div className="main-gallery">
               <div className="main-image-container">
-                <img 
-                  src={galleryImages[currentImageIndex].src}
-                  alt={galleryImages[currentImageIndex].alt}
-                  className="main-image"
-                  onError={(e) => {
-                    e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAwIiBoZWlnaHQ9IjYwMCIgdmlld0JveD0iMCAwIDgwMCA2MDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI4MDAiIGhlaWdodD0iNjAwIiBmaWxsPSIjMkQyRDJEIi8+CjxwYXRoIGQ9Ik00MDAgMjAwQzQyNy42MTQgMjAwIDQ1MCAyMjIuMzg2IDQ1MCAyNTBTNDI3LjYxNCAzMDAgNDAwIDMwMFMzNTAgMjc3LjYxNCAzNTAgMjUwUzM3Mi4zODYgMjAwIDQwMCAyMDBaIiBmaWxsPSIjNEE0QTRBIi8+CjxwYXRoIGQ9Ik0zMjAgMzUwSDQ4MEM0ODguODM3IDM1MCA0OTYgMzU3LjE2MyA0OTYgMzY2VjQwMEg0ODBIMzIwSDMwNFYzNjZDMzA0IDM1Ny4xNjMgMzExLjE2MyAzNTAgMzIwIDM1MFoiIGZpbGw9IiM0QTRBNEEiLz4KPC9zdmc+';
-                  }}
-                />
+                {galleryImages[currentImageIndex].type === 'video' ? (
+                  <video 
+                    key={currentImageIndex} // Force re-render when video changes
+                    src={galleryImages[currentImageIndex].src}
+                    poster={galleryImages[currentImageIndex].poster}
+                    className="main-image"
+                    controls
+                    autoPlay
+                    muted
+                    onPlay={handleVideoPlay}
+                    onEnded={handleVideoEnd}
+                    onPause={handleVideoPause}
+                    onError={(e) => {
+                      e.target.style.display = 'none';
+                      const fallbackImg = document.createElement('img');
+                      fallbackImg.src = galleryImages[currentImageIndex].poster || 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAwIiBoZWlnaHQ9IjYwMCIgdmlld0JveD0iMCAwIDgwMCA2MDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI4MDAiIGhlaWdodD0iNjAwIiBmaWxsPSIjMkQyRDJEIi8+CjxwYXRoIGQ9Ik00MDAgMjAwQzQyNy42MTQgMjAwIDQ1MCAyMjIuMzg2IDQ1MCAyNTBTNDI3LjYxNCAzMDAgNDAwIDMwMFMzNTAgMjc3LjYxNCAzNTAgMjUwUzM3Mi4zODYgMjAwIDQwMCAyMDBaIiBmaWxsPSIjNEE0QTRBIi8+CjxwYXRoIGQ9Ik0zMjAgMzUwSDQ4MEM0ODguODM3IDM1MCA0OTYgMzU3LjE2MyA0OTYgMzY2VjQwMEg0ODBIMzIwSDMwNFYzNjZDMzA0IDM1Ny4xNjMgMzExLjE2MyAzNTAgMzIwIDM1MFoiIGZpbGw9IiM0QTRBNEEiLz4KPC9zdmc+';
+                      fallbackImg.className = 'main-image';
+                      fallbackImg.alt = galleryImages[currentImageIndex].alt;
+                      e.target.parentNode.insertBefore(fallbackImg, e.target);
+                    }}
+                  />
+                ) : (
+                  <img 
+                    src={galleryImages[currentImageIndex].src}
+                    alt={galleryImages[currentImageIndex].alt}
+                    className="main-image"
+                    onError={(e) => {
+                      e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAwIiBoZWlnaHQ9IjYwMCIgdmlld0JveD0iMCAwIDgwMCA2MDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI4MDAiIGhlaWdodD0iNjAwIiBmaWxsPSIjMkQyRDJEIi8+CjxwYXRoIGQ9Ik00MDAgMjAwQzQyNy42MTQgMjAwIDQ1MCAyMjIuMzg2IDQ1MCAyNTBTNDI3LjYxNCAzMDAgNDAwIDMwMFMzNTAgMjc3LjYxNCAzNTAgMjUwUzM3Mi4zODYgMjAwIDQwMCAyMDBaIiBmaWxsPSIjNEE0QTRBIi8+CjxwYXRoIGQ9Ik0zMjAgMzUwSDQ4MEM0ODguODM3IDM1MCA0OTYgMzU3LjE2MyA0OTYgMzY2VjQwMEg0ODBIMzIwSDMwNFYzNjZDMzA0IDM1Ny4xNjMgMzExLjE2MyAzNTAgMzIwIDM1MFoiIGZpbGw9IiM0QTRBNEEiLz4KPC9zdmc+';
+                    }}
+                  />
+                )}
                 <div className="image-caption">
                   <p>{galleryImages[currentImageIndex].caption}</p>
+                  {galleryImages[currentImageIndex].type === 'video' && (
+                    <span className="video-indicator">
+                      <i className="fas fa-play-circle"></i> Video
+                    </span>
+                  )}
                 </div>
               </div>
               
@@ -173,16 +298,21 @@ function Homepage() {
                 {galleryImages.map((image, index) => (
                   <div 
                     key={index}
-                    className={`thumbnail ${index === currentImageIndex ? 'active' : ''}`}
+                    className={`thumbnail ${index === currentImageIndex ? 'active' : ''} ${image.type === 'video' ? 'video-thumbnail' : ''}`}
                     onClick={() => handleImageClick(index)}
                   >
                     <img 
-                      src={image.src}
+                      src={image.type === 'video' ? (image.poster || image.src) : image.src}
                       alt={image.alt}
                       onError={(e) => {
                         e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjMkQyRDJEIi8+CjxjaXJjbGUgY3g9IjUwIiBjeT0iNDAiIHI9IjEwIiBmaWxsPSIjNEE0QTRBIi8+CjxyZWN0IHg9IjMwIiB5PSI2MCIgd2lkdGg9IjQwIiBoZWlnaHQ9IjIwIiByeD0iNCIgZmlsbD0iIzRBNEE0QSIvPgo8L3N2Zz4K';
                       }}
                     />
+                    {image.type === 'video' && (
+                      <div className="video-play-icon">
+                        <i className="fas fa-play"></i>
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>
@@ -262,10 +392,10 @@ function Homepage() {
                 </div>
               </div>
               
-              <Link to="/moduli" className="btn btn-primary btn-large">
+              <button onClick={handleModuliClick} className="btn btn-primary btn-large">
                 <i className="fas fa-file-signature"></i>
                 Compila Moduli di Tesseramento
-              </Link>
+              </button>
             </div>
             
             <div className="contact-image">

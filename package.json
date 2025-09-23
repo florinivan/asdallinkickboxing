@@ -2,6 +2,7 @@
   "name": "asd-allin-kickboxing-spa",
   "version": "2.0.0",
   "description": "Sistema Gestione PDF - Single Page Application per ASD All-in Kickboxing",
+  "homepage": ".",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.4",
