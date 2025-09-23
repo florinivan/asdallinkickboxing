@@ -28,7 +28,16 @@ const initialState = {
     genitore2_cognome: '',
     genitore2_telefono: '',
     contatto_emergenza: '',
-    note: ''
+    telefono_emergenza: '',
+    note: '',
+    
+    // Consensi per le pagine 4-6
+    marketing_consent: null, // true = acconsento, false = non acconsento, null = non scelto
+    data_consent: null, // true = acconsento, false = non acconsento, null = non scelto
+    image_consent: true, // Per pagina 4 - autorizzazione immagine (sempre true se compila il form)
+    
+    // Firma digitale
+    signature: '' // Base64 dell'immagine della firma
   },
   
   // UI state

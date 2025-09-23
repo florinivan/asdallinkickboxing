@@ -2,6 +2,8 @@ import React, { useEffect } from 'react';
 import { useApp } from '../context/AppContext';
 import { validateCodiceFiscale, validateEmail, formatTelefono } from '../services/validation';
 import { generateDocument, downloadDocument } from '../services/api';
+import pdfService from '../services/pdfService';
+import SignaturePad from './SignaturePad';
 import './DocumentForm.css';
 
 function DocumentForm() {
@@ -77,6 +79,15 @@ function DocumentForm() {
       }
     }
 
+    // Validazione consensi obbligatori
+    if (formData.data_consent === null) {
+      errors.data_consent = 'Il consenso al trattamento dati è obbligatorio';
+    }
+    
+    if (formData.marketing_consent === null) {
+      errors.marketing_consent = 'Selezionare una scelta per il consenso marketing';
+    }
+
     return errors;
   };
 
@@ -113,6 +124,19 @@ function DocumentForm() {
       actions.setMessage(error.message || 'Errore durante la generazione del documento', 'error');
     } finally {
       actions.setLoading(false);
+    }
+  };
+
+  // Funzione di debug per analizzare la struttura del PDF
+  const handleDebugPDF = async () => {
+    try {
+      actions.setMessage('Analizzando struttura PDF...', 'info');
+      const analysis = await pdfService.analyzePDFStructure();
+      console.log('Analisi PDF completata:', analysis);
+      actions.setMessage('Analisi completata! Controlla la console del browser per i dettagli.', 'success');
+    } catch (error) {
+      console.error('Errore nell\'analisi PDF:', error);
+      actions.setMessage('Errore nell\'analisi del PDF', 'error');
     }
   };
 
@@ -423,6 +447,133 @@ function DocumentForm() {
           />
         </div>
 
+        {/* Sezione Consensi */}
+        <div className="form-section">
+          <h3>
+            <i className="fas fa-check-square"></i>
+            Consensi e Autorizzazioni
+          </h3>
+          
+          {/* Consenso Marketing */}
+          <div className="form-group consent-group">
+            <label className="consent-label">
+              <i className="fas fa-envelope"></i>
+              Consenso Marketing e Comunicazioni Commerciali
+            </label>
+            <p className="consent-description">
+              Consenso per l'invio di comunicazioni commerciali, promozioni e informazioni sui servizi della Federazione.
+            </p>
+            <div className="radio-group">
+              <label className="radio-option">
+                <input
+                  type="radio"
+                  name="marketing_consent"
+                  value="true"
+                  checked={state.formData.marketing_consent === true}
+                  onChange={() => handleInputChange('marketing_consent', true)}
+                />
+                <span className="radio-label">
+                  <i className="fas fa-check"></i>
+                  ACCONSENTO
+                </span>
+              </label>
+              <label className="radio-option">
+                <input
+                  type="radio"
+                  name="marketing_consent"
+                  value="false"
+                  checked={state.formData.marketing_consent === false}
+                  onChange={() => handleInputChange('marketing_consent', false)}
+                />
+                <span className="radio-label">
+                  <i className="fas fa-times"></i>
+                  NON ACCONSENTO
+                </span>
+              </label>
+            </div>
+            {state.errors.marketing_consent && <span className="error-text">{state.errors.marketing_consent}</span>}
+          </div>
+
+          {/* Consenso Trattamento Dati */}
+          <div className="form-group consent-group">
+            <label className="consent-label">
+              <i className="fas fa-shield-alt"></i>
+              Consenso Trattamento Dati Personali
+            </label>
+            <p className="consent-description">
+              Consenso per il trattamento dei dati personali per le finalità istituzionali della Federazione (obbligatorio).
+            </p>
+            <div className="radio-group">
+              <label className="radio-option">
+                <input
+                  type="radio"
+                  name="data_consent"
+                  value="true"
+                  checked={state.formData.data_consent === true}
+                  onChange={() => handleInputChange('data_consent', true)}
+                />
+                <span className="radio-label">
+                  <i className="fas fa-check"></i>
+                  ACCONSENTO
+                </span>
+              </label>
+              <label className="radio-option">
+                <input
+                  type="radio"
+                  name="data_consent"
+                  value="false"
+                  checked={state.formData.data_consent === false}
+                  onChange={() => handleInputChange('data_consent', false)}
+                />
+                <span className="radio-label">
+                  <i className="fas fa-times"></i>
+                  NON ACCONSENTO
+                </span>
+              </label>
+            </div>
+            {state.errors.data_consent && <span className="error-text">{state.errors.data_consent}</span>}
+          </div>
+
+          {/* Autorizzazione Immagine */}
+          <div className="form-group consent-group">
+            <label className="consent-label">
+              <i className="fas fa-camera"></i>
+              Autorizzazione Utilizzo Immagine
+            </label>
+            <p className="consent-description">
+              Autorizzazione per l'utilizzo dell'immagine per finalità di promozione e diffusione delle attività della Federazione.
+            </p>
+            <label className="checkbox-option">
+              <input
+                type="checkbox"
+                checked={Boolean(state.formData.image_consent)}
+                onChange={(e) => handleInputChange('image_consent', e.target.checked)}
+              />
+              <span className="checkbox-label">
+                <i className="fas fa-check"></i>
+                Autorizzo l'utilizzo dell'immagine per le finalità descritte
+              </span>
+            </label>
+            {state.errors.image_consent && <span className="error-text">{state.errors.image_consent}</span>}
+          </div>
+
+          {/* Firma Digitale */}
+          <div className="form-group consent-group">
+            <label className="consent-label">
+              <i className="fas fa-signature"></i>
+              Firma Digitale
+            </label>
+            <p className="consent-description">
+              Firma digitalmente il documento. La firma verrà applicata a tutte le pagine che richiedono la firma.
+            </p>
+            <SignaturePad
+              value={state.formData.signature}
+              onSignatureChange={(signature) => handleInputChange('signature', signature)}
+            />
+            {state.errors.signature && <span className="error-text">{state.errors.signature}</span>}
+          </div>
+        </div>
+
         {/* Azioni */}
         <div className="form-actions">
           <button
@@ -443,6 +594,18 @@ function DocumentForm() {
             <i className="fas fa-refresh"></i>
             Cancella tutto
           </button>
+          
+          {process.env.NODE_ENV === 'development' && (
+            <button
+              type="button"
+              className="btn btn-info"
+              onClick={handleDebugPDF}
+              disabled={state.isLoading}
+            >
+              <i className="fas fa-search"></i>
+              Debug PDF
+            </button>
+          )}
         </div>
       </form>
     </div>
