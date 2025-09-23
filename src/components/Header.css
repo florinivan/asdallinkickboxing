@@ -1,10 +1,23 @@
 /* Header Component Styles */
 .header {
-  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #1a1a1a 100%);
   color: white;
-  padding: var(--spacing-xl) 0;
+  padding: var(--spacing-lg) 0;
   margin-bottom: var(--spacing-xl);
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, rgba(0, 255, 0, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+  pointer-events: none;
 }
 
 .header-content {
@@ -12,33 +25,93 @@
   margin: 0 auto;
   padding: 0 var(--spacing-lg);
   text-align: center;
-}
-
-.header h1 {
-  font-size: var(--font-size-3xl);
-  font-weight: 700;
-  margin: 0;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.header .subtitle {
-  font-size: var(--font-size-lg);
-  margin-top: var(--spacing-sm);
-  opacity: 0.9;
-  font-weight: 300;
+  position: relative;
+  z-index: 1;
 }
 
 .header .logo {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: var(--spacing-md);
-  margin-bottom: var(--spacing-sm);
+  margin-bottom: var(--spacing-md);
 }
 
-.header .logo i {
+.header .logo-image {
+  height: 80px;
+  width: auto;
+  max-width: 300px;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+  transition: transform 0.3s ease;
+}
+
+.header .logo-image:hover {
+  transform: scale(1.05);
+}
+
+.header .logo-fallback {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.header .logo-fallback i {
   font-size: var(--font-size-2xl);
+  color: #00ff00;
   animation: pulse 2s infinite;
+}
+
+.header .logo-fallback span {
+  font-size: var(--font-size-2xl);
+  font-weight: 700;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.header .subtitle {
+  font-size: var(--font-size-lg);
+  margin: 0;
+  opacity: 0.9;
+  font-weight: 300;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .header {
+    padding: var(--spacing-md) 0;
+  }
+  
+  .header .logo-image {
+    height: 60px;
+    max-width: 250px;
+  }
+  
+  .header .logo-fallback span {
+    font-size: var(--font-size-xl);
+  }
+  
+  .header .subtitle {
+    font-size: var(--font-size-md);
+  }
+}
+
+@media (max-width: 480px) {
+  .header .logo-image {
+    height: 50px;
+    max-width: 200px;
+  }
+  
+  .header .logo-fallback span {
+    font-size: var(--font-size-lg);
+  }
+  
+  .header .subtitle {
+    font-size: var(--font-size-sm);
+  }
 }
 
 @keyframes pulse {

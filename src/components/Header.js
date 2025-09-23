@@ -6,10 +6,21 @@ function Header() {
     <header className="header">
       <div className="header-content">
         <div className="logo">
-          <i className="fas fa-fist-raised"></i>
-          <h1>ASD Allin Kickboxing</h1>
+          <img 
+            src="/logo.png" 
+            alt="ASD All IN Kickboxing Logo" 
+            className="logo-image"
+            onError={(e) => {
+              // Fallback se l'immagine non si carica
+              e.target.style.display = 'none';
+              e.target.nextElementSibling.style.display = 'flex';
+            }}
+          />
+          <div className="logo-fallback" style={{display: 'none'}}>
+            <i className="fas fa-fist-raised"></i>
+            <span>ASD All IN Kickboxing</span>
+          </div>
         </div>
-        <p className="subtitle">Compilazione Documenti</p>
       </div>
     </header>
   );

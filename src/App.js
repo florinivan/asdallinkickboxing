@@ -15,16 +15,6 @@ function App() {
         
         <main className="main-content">
           <div className="container">
-            <div className="app-intro">
-              <h1>
-                <i className="fas fa-file-pdf"></i>
-                Sistema di Gestione Documenti PDF
-              </h1>
-              <p>
-                Visualizza il documento PDF e compila il form per generare 
-                la tua versione personalizzata da scaricare.
-              </p>
-            </div>
 
             <MessageDisplay />
 

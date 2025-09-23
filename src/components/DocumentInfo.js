@@ -9,7 +9,7 @@ function DocumentInfo() {
           <i className="fas fa-file-contract"></i>
         </div>
         <h2>Compilazione Documento</h2>
-        <p>Compila il modulo con le tue informazioni per generare il documento personalizzato</p>
+        <p>Compila il modulo con le tue informazioni</p>
         <div className="document-name">
           <i className="fas fa-file-pdf"></i>
           <span>Documento: Privacy Policy e Dettagli</span>
