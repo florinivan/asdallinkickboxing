@@ -1,0 +1,24 @@
+<!-- Placeholder SVG per Gallery 4 - Atleti sul Podio -->
+<svg width="800" height="600" viewBox="0 0 800 600" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="800" height="600" fill="#2d2d2d"/>
+  <!-- Podio -->
+  <rect x="200" y="450" width="120" height="100" fill="#CD7F32"/>
+  <rect x="340" y="400" width="120" height="150" fill="#FFD700"/>
+  <rect x="480" y="450" width="120" height="100" fill="#C0C0C0"/>
+  <text x="260" y="520" fill="#000" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" font-weight="bold">3</text>
+  <text x="400" y="500" fill="#000" text-anchor="middle" font-family="Arial, sans-serif" font-size="30" font-weight="bold">1</text>
+  <text x="540" y="520" fill="#000" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" font-weight="bold">2</text>
+  <!-- Atleti -->
+  <circle cx="260" cy="380" r="30" fill="#333"/>
+  <rect x="230" y="410" width="60" height="40" fill="#1a1a1a"/>
+  <circle cx="400" cy="330" r="30" fill="#333"/>
+  <rect x="370" y="360" width="60" height="40" fill="#1a1a1a"/>
+  <circle cx="540" cy="380" r="30" fill="#333"/>
+  <rect x="510" y="410" width="60" height="40" fill="#1a1a1a"/>
+  <!-- Trofeo -->
+  <rect x="380" y="280" width="40" height="40" fill="#FFD700"/>
+  <circle cx="400" cy="270" r="15" fill="#FFD700"/>
+  <text x="400" y="200" fill="#00ff00" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" font-weight="bold">CAMPIONI</text>
+  <text x="400" y="230" fill="#ffffff" text-anchor="middle" font-family="Arial, sans-serif" font-size="14">ALL IN KICKBOXING</text>
+  <text x="400" y="570" fill="#666666" text-anchor="middle" font-family="Arial, sans-serif" font-size="12">Sostituisci con gallery-4.jpg</text>
+</svg>

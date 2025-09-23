@@ -5,7 +5,7 @@ import './Homepage.css';
 function Homepage() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
-  // Immagini della gallery - con placeholder SVG
+  // Immagini della gallery - con placeholder SVG funzionanti
   const galleryImages = [
     {
       src: '/images/gallery-1.svg',
@@ -23,17 +23,17 @@ function Homepage() {
       caption: 'I nostri successi nelle competizioni'
     },
     {
-      src: '/images/gallery-4.jpg',
+      src: '/images/gallery-4.svg',
       alt: 'Atleti sul podio',
       caption: 'Atleti vincitori sul podio'
     },
     {
-      src: '/images/gallery-5.jpg',
+      src: '/images/gallery-5.svg',
       alt: 'Competizioni e tornei',
-      caption: 'Competizioni regionali'
+      caption: 'Il nostro team unito nelle competizioni'
     },
     {
-      src: '/images/gallery-6.jpg',
+      src: '/images/gallery-6.svg',
       alt: 'Certificazioni e diplomi',
       caption: 'Certificazioni ufficiali FederKombat'
     }

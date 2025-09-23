@@ -1,0 +1,27 @@
+<!-- Placeholder SVG per Gallery 5 - Gruppo Competizione -->
+<svg width="800" height="600" viewBox="0 0 800 600" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="800" height="600" fill="#1a1a1a"/>
+  <!-- Sfondo palestra -->
+  <rect x="0" y="400" width="800" height="200" fill="#2d2d2d"/>
+  <!-- Gruppo di atleti -->
+  <circle cx="200" cy="300" r="35" fill="#666"/>
+  <rect x="165" y="335" width="70" height="50" fill="#1a1a1a"/>
+  <circle cx="300" cy="290" r="35" fill="#666"/>
+  <rect x="265" y="325" width="70" height="50" fill="#1a1a1a"/>
+  <circle cx="400" cy="280" r="40" fill="#666"/>
+  <rect x="360" y="320" width="80" height="60" fill="#1a1a1a"/>
+  <circle cx="500" cy="290" r="35" fill="#666"/>
+  <rect x="465" y="325" width="70" height="50" fill="#1a1a1a"/>
+  <circle cx="600" cy="300" r="35" fill="#666"/>
+  <rect x="565" y="335" width="70" height="50" fill="#1a1a1a"/>
+  <!-- Logo ALL IN sui vestiti -->
+  <text x="200" y="355" fill="#00ff00" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" font-weight="bold">ALL IN</text>
+  <text x="300" y="345" fill="#00ff00" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" font-weight="bold">ALL IN</text>
+  <text x="400" y="350" fill="#00ff00" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" font-weight="bold">ALL IN</text>
+  <text x="500" y="345" fill="#00ff00" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" font-weight="bold">ALL IN</text>
+  <text x="600" y="355" fill="#00ff00" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" font-weight="bold">ALL IN</text>
+  <!-- Titolo -->
+  <text x="400" y="150" fill="#ffffff" text-anchor="middle" font-family="Arial, sans-serif" font-size="20" font-weight="bold">TEAM ALL IN KICKBOXING</text>
+  <text x="400" y="180" fill="#00ff00" text-anchor="middle" font-family="Arial, sans-serif" font-size="16">Una Famiglia Unita</text>
+  <text x="400" y="570" fill="#666666" text-anchor="middle" font-family="Arial, sans-serif" font-size="12">Sostituisci con gallery-5.jpg</text>
+</svg>
