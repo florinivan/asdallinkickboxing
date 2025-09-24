@@ -24,6 +24,9 @@ export async function generateDocument(formData) {
     // Genera il PDF
     const pdfBytes = await pdfService.fillPDF(formData);
     
+    // Log dimensione PDF generato
+    console.log('📊 PDF generato - Dimensione:', pdfBytes.length, 'bytes');
+    
     // Crea filename personalizzato
     const timestamp = new Date().toISOString().slice(0, 10);
     const filename = `documento_${formData.nome?.replace(/\s+/g, '_') || 'compilato'}_${timestamp}.pdf`;

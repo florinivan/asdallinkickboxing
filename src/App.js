@@ -6,6 +6,7 @@ import Homepage from './components/Homepage';
 import PDFViewer from './components/PDFViewer';
 import DocumentForm from './components/DocumentForm';
 import MessageDisplay from './components/MessageDisplay';
+import BackOffice from './components/BackOffice';
 import Footer from './components/Footer';
 import './styles/App.css';
 
@@ -38,6 +39,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Homepage />} />
             <Route path="/moduli" element={<ModuliPage />} />
+            <Route path="/admin" element={<BackOffice />} />
           </Routes>
 
           <Footer />

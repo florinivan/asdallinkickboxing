@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useApp } from '../context/AppContext';
 import { validateCodiceFiscale, validateEmail, formatTelefono } from '../services/validation';
 import { generateDocument, downloadDocument } from '../services/api';
+import documentManager from '../services/documentManager';
 import pdfService from '../services/pdfService';
 import SignaturePad from './SignaturePad';
 import './DocumentForm.css';
@@ -109,12 +110,30 @@ function DocumentForm() {
       const response = await generateDocument(state.formData);
       
       if (response.success) {
+        // Crea un blob dal PDF per il salvataggio
+        const pdfBlob = new Blob([response.data.pdfBytes], { type: 'application/pdf' });
+        
+        // Log dimensione blob creato
+        console.log('📊 Blob PDF creato - Dimensione:', pdfBlob.size, 'bytes');
+        console.log('📊 pdfBytes originali - Dimensione:', response.data.pdfBytes.length, 'bytes');
+        
+        // Genera nome file personalizzato
+        const filename = documentManager.generateFilename(state.formData);
+        
+        // Salva i metadati del documento per il backoffice
+        try {
+          await documentManager.saveDocumentMetadata(state.formData, filename, pdfBlob);
+        } catch (saveError) {
+          console.warn('Errore nel salvataggio metadati documento:', saveError);
+          // Non blocciano il processo se il salvataggio fallisce
+        }
+        
         // Avvia automaticamente il download
-        downloadDocument(response.data.pdfBytes, response.data.filename);
+        downloadDocument(response.data.pdfBytes, filename);
         
         // Pulisci il form e mostra messaggio di successo
         actions.resetForm();
-        actions.setMessage(response.data.message, 'success');
+        actions.setMessage(response.data.message + ' - Documento archiviato nel sistema', 'success');
       } else {
         throw new Error('Errore nella generazione del documento');
       }

@@ -1,0 +1,21 @@
+# Configurazione per servire file PDF
+<IfModule mod_mime.c>
+    AddType application/pdf .pdf
+</IfModule>
+
+# Abilita CORS per i PDF (se necessario)
+<IfModule mod_headers.c>
+    <FilesMatch "\.(pdf)$">
+        Header set Access-Control-Allow-Origin "*"
+        Header set Access-Control-Allow-Methods "GET, OPTIONS"
+        Header set Access-Control-Allow-Headers "Content-Type"
+    </FilesMatch>
+</IfModule>
+
+# Cache per i PDF (7 giorni)
+<IfModule mod_expires.c>
+    ExpiresActive on
+    <FilesMatch "\.(pdf)$">
+        ExpiresDefault "access plus 7 days"
+    </FilesMatch>
+</IfModule>

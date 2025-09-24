@@ -337,13 +337,15 @@ label:has(+ textarea[required]):after {
 }
 
 .radio-option:has(input:checked) {
-  background: #667eea;
-  border-color: #667eea;
-  color: white;
+  background: #667eea !important;
+  border-color: #667eea !important;
+  color: white !important;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.3) !important;
 }
 
 .radio-option:has(input:checked) .radio-label {
-  color: white;
+  color: white !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 .radio-label {
@@ -374,15 +376,24 @@ label:has(+ textarea[required]):after {
 }
 
 .checkbox-option:has(input:checked) {
-  background: #667eea;
-  border-color: #667eea;
-  color: white;
+  background: #667eea !important;
+  border-color: #667eea !important;
+  color: white !important;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.3) !important;
 }
 
 .checkbox-option input[type="checkbox"] {
   margin: 0;
   cursor: pointer;
   transform: scale(1.2);
+  accent-color: #ffffff; /* Colora la checkbox stessa di bianco quando selezionata */
+}
+
+/* Miglioramento per la checkbox quando è selezionata */
+.checkbox-option:has(input:checked) input[type="checkbox"] {
+  background: white;
+  border-color: white;
+  accent-color: #ffffff;
 }
 
 .checkbox-label {
@@ -396,7 +407,14 @@ label:has(+ textarea[required]):after {
 }
 
 .checkbox-option:has(input:checked) .checkbox-label {
-  color: white;
+  color: white !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3); /* Aggiunge ombra per migliorare la leggibilità */
+}
+
+/* Miglioramento per i radio buttons */
+.radio-option:has(input:checked) .radio-label {
+  color: white !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 /* Responsive consent styles */
@@ -408,9 +426,35 @@ label:has(+ textarea[required]):after {
   
   .radio-option {
     justify-content: center;
+    font-size: 1rem; /* Testo più grande su mobile */
+  }
+  
+  .checkbox-option {
+    font-size: 1rem; /* Testo più grande su mobile */
   }
   
   .consent-group {
     padding: 1rem;
   }
+  
+  /* Miglioramento contrasto su mobile */
+  .radio-option:has(input:checked) .radio-label,
+  .checkbox-option:has(input:checked) .checkbox-label {
+    color: white !important;
+    font-weight: 700 !important;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5) !important;
+  }
+}
+
+/* Fallback per browser che non supportano :has() */
+.radio-option.selected {
+  background: #667eea !important;
+  border-color: #667eea !important;
+  color: white !important;
+}
+
+.radio-option.selected .radio-label,
+.checkbox-option.selected .checkbox-label {
+  color: white !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }

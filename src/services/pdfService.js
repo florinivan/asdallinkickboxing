@@ -27,6 +27,38 @@ class PDFService {
   }
 
   /**
+   * Verifica l'integrità di un PDF
+   */
+  async verifyPDFIntegrity(pdfBytes) {
+    try {
+      if (!pdfBytes || pdfBytes.length < 1000) {
+        return { valid: false, error: 'PDF troppo piccolo o vuoto' };
+      }
+      
+      // Verifica header PDF
+      const header = new Uint8Array(pdfBytes.slice(0, 8));
+      const headerStr = String.fromCharCode(...header);
+      if (!headerStr.startsWith('%PDF-')) {
+        return { valid: false, error: 'Header PDF mancante o invalido' };
+      }
+      
+      // Verifica footer PDF
+      const footer = new Uint8Array(pdfBytes.slice(-32));
+      const footerStr = String.fromCharCode(...footer);
+      if (!footerStr.includes('%%EOF')) {
+        return { valid: false, error: 'Footer PDF mancante' };
+      }
+      
+      // Tenta di ricaricare il PDF per verificare la validità
+      await PDFDocument.load(pdfBytes);
+      
+      return { valid: true, size: pdfBytes.length };
+    } catch (error) {
+      return { valid: false, error: error.message };
+    }
+  }
+
+  /**
    * Compila il PDF con i dati del form
    */
   async fillPDF(formData) {
@@ -53,6 +85,15 @@ class PDFService {
       
       // Genera il PDF finale
       const pdfBytes = await pdfDoc.save();
+      
+      // Verifica l'integrità del PDF generato
+      const integrity = await this.verifyPDFIntegrity(pdfBytes);
+      console.log('🔍 Verifica integrità PDF:', integrity);
+      
+      if (!integrity.valid) {
+        throw new Error(`PDF generato non valido: ${integrity.error}`);
+      }
+      
       return pdfBytes;
       
     } catch (error) {
