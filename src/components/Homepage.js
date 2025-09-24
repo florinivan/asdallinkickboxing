@@ -379,8 +379,10 @@ function Homepage() {
               
               <div className="contact-details">
                 <div className="contact-item">
-                  <i className="fas fa-phone"></i>
-                  <span>Ist. Adrian Macau: 3888988245</span>
+                  <i className="fab fa-whatsapp"></i>
+                  <a href="https://wa.me/393888988245" target="_blank" rel="noopener noreferrer">
+                    Ist. Adrian Macau: Scrivi su WhatsApp
+                  </a>
                 </div>
                 <div className="contact-item">
                   <i className="fas fa-map-marker-alt"></i>

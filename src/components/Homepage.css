@@ -551,6 +551,26 @@
   width: 20px;
 }
 
+.contact-item a {
+  color: var(--text-gray);
+  text-decoration: none;
+  transition: var(--transition);
+}
+
+.contact-item a:hover {
+  color: var(--accent-color);
+  text-decoration: none;
+}
+
+.contact-item:has(.fa-whatsapp) a {
+  color: #25D366;
+}
+
+.contact-item:has(.fa-whatsapp) a:hover {
+  color: #128C7E;
+  transform: scale(1.05);
+}
+
 .contact-image {
   text-align: center;
 }
