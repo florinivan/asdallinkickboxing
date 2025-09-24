@@ -10,13 +10,17 @@ const SignaturePad = ({ onSignatureChange, value }) => {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
     
-    // Set canvas size
-    canvas.width = 400;
-    canvas.height = 150;
+    // Set canvas size - responsive
+    const container = canvas.parentElement;
+    const containerWidth = container.offsetWidth;
+    const isMobile = window.innerWidth <= 768;
+    
+    canvas.width = Math.min(400, containerWidth - 20);
+    canvas.height = isMobile ? 120 : 150;
     
     // Set drawing style
     ctx.strokeStyle = '#000';
-    ctx.lineWidth = 2;
+    ctx.lineWidth = isMobile ? 3 : 2;
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
     
@@ -33,7 +37,43 @@ const SignaturePad = ({ onSignatureChange, value }) => {
       };
       img.src = value;
     }
-  }, [value]);
+    
+    // Gestione ridimensionamento finestra
+    const handleResize = () => {
+      const newContainerWidth = container.offsetWidth;
+      const newIsMobile = window.innerWidth <= 768;
+      const newWidth = Math.min(400, newContainerWidth - 20);
+      const newHeight = newIsMobile ? 120 : 150;
+      
+      if (canvas.width !== newWidth || canvas.height !== newHeight) {
+        // Salva contenuto attuale se presente
+        const imageData = !isEmpty ? canvas.toDataURL() : null;
+        
+        canvas.width = newWidth;
+        canvas.height = newHeight;
+        
+        // Reimposta stili
+        ctx.strokeStyle = '#000';
+        ctx.lineWidth = newIsMobile ? 3 : 2;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        ctx.fillStyle = '#fff';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        
+        // Ricarica il contenuto se era presente
+        if (imageData) {
+          const img = new Image();
+          img.onload = () => {
+            ctx.drawImage(img, 0, 0);
+          };
+          img.src = imageData;
+        }
+      }
+    };
+    
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [value, isEmpty]);
 
   const startDrawing = (e) => {
     setIsDrawing(true);
@@ -84,31 +124,38 @@ const SignaturePad = ({ onSignatureChange, value }) => {
     onSignatureChange('');
   };
 
-  // Touch events for mobile
+  // Touch events for mobile - chiamate dirette
   const handleTouchStart = (e) => {
     e.preventDefault();
+    e.stopPropagation(); // Previene la propagazione dell'evento
     const touch = e.touches[0];
-    const mouseEvent = new MouseEvent('mousedown', {
+    
+    // Simula l'evento mouse con le coordinate corrette
+    const fakeEvent = {
       clientX: touch.clientX,
       clientY: touch.clientY
-    });
-    canvasRef.current.dispatchEvent(mouseEvent);
+    };
+    
+    startDrawing(fakeEvent);
   };
 
   const handleTouchMove = (e) => {
     e.preventDefault();
+    e.stopPropagation(); // Previene la propagazione dell'evento
     const touch = e.touches[0];
-    const mouseEvent = new MouseEvent('mousemove', {
+    
+    // Simula l'evento mouse con le coordinate corrette
+    const fakeEvent = {
       clientX: touch.clientX,
       clientY: touch.clientY
-    });
-    canvasRef.current.dispatchEvent(mouseEvent);
+    };
+    
+    draw(fakeEvent);
   };
 
   const handleTouchEnd = (e) => {
     e.preventDefault();
-    const mouseEvent = new MouseEvent('mouseup', {});
-    canvasRef.current.dispatchEvent(mouseEvent);
+    stopDrawing();
   };
 
   return (
@@ -124,6 +171,8 @@ const SignaturePad = ({ onSignatureChange, value }) => {
           onTouchStart={handleTouchStart}
           onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}
+          onTouchCancel={handleTouchEnd}
+          style={{ touchAction: 'none' }}
         />
         {isEmpty && (
           <div className="signature-placeholder">
